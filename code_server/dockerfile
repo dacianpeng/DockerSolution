@@ -1,0 +1,20 @@
+FROM ubuntu
+
+RUN apt update && apt upgrade -y
+
+RUN apt install curl -y
+
+RUN curl -fsSL https://code-server.dev/install.sh | sh
+
+# RUN code-server --install-extension danielgjackson.auto-dark-mode-windows
+# RUN code-server --install-extension ms-python.python
+# RUN code-server --install-extension mechatroner.rainbow-csv
+# RUN code-server --install-extension cweijan.vscode-office
+# RUN code-server --install-extension ms-toolsai.jupyter
+# RUN code-server --install-extension cweijan.vscode-database-client2
+
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]

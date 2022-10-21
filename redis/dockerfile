@@ -1,0 +1,9 @@
+FROM redis
+
+ENV TZ "Asia/Shanghai"
+
+RUN mkdir /usr/local/etc/redis
+
+COPY redis.conf /redis.conf
+
+ENTRYPOINT [ "redis-server", "/redis.conf" ]

@@ -1,0 +1,22 @@
+FROM ubuntu
+
+ENV all_proxy=dacian.cc:65534
+
+RUN apt update && apt upgrade -y
+
+RUN apt install pip -y
+
+COPY requirements.txt requirements.txt
+
+RUN pip install -r requirements.txt
+
+
+COPY jupyter_notebook_config.json /root/.jupyter/jupyter_notebook_config.json
+
+
+
+
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]

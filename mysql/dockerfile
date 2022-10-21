@@ -1,0 +1,9 @@
+FROM mysql
+
+ENV TZ "Asia/Shanghai"
+
+
+ENV MYSQL_ROOT_PASSWORD root_password
+
+
+# Default EntryPoint

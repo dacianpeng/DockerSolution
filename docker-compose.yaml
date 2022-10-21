@@ -1,0 +1,123 @@
+
+#! should be tested with `docker compose --compatibility config`
+
+services:
+
+  test_mysql:
+    platform: linux/x86_64
+    restart: always
+    build: ./mysql
+    image: dacianpeng/apps:test_mysql
+    ports:
+      - 10086:3306
+    volumes:
+      # File    
+      - type: bind
+        source: ./dataset/mysql
+        target: /var/lib/mysql
+      # Config
+      - type: bind
+        source: ./configs/mysql.cnf
+        target: /etc/my.cnf
+      # - type: volume
+      #   source: virtual_volume
+      #   target: /target/path
+    container_name: test_mysql
+
+
+  test_user1:
+
+    platform: linux/x86_64
+    restart: always
+    build: ./users/user2
+    image: dacianpeng/apps:test_user1
+    deploy:
+        resources:
+          limits:
+            cpus: '4'
+            memory: 1024M
+          reservations:
+            cpus: '1'
+            memory: 128M
+    storage_opt:
+      #? not sure this works or not
+      # https://docs.docker.com/compose/compose-file/compose-file-v2/#storage_opt
+      size: '10G' 
+    cpu_shares: 1024 # default 1024
+    ports: 
+      - 10087:22
+    volumes:
+      - type: bind
+        source: ./share
+        target: /share
+    container_name: test_user1
+
+
+
+  test_user2:
+
+    platform: linux/x86_64
+    restart: always
+    build: ./users/user2
+    image: dacianpeng/apps:test_user2
+    deploy:
+        resources:
+          limits:
+            cpus: '4'
+            memory: 1024M
+          reservations:
+            cpus: '1'
+            memory: 128M
+    storage_opt:
+      size: '10G'
+    cpu_shares: 2000
+    ports:
+      - 10088:22
+    volumes:
+      - type: bind
+        source: ./share
+        target: /share
+    container_name: test_user2
+
+
+  test_redis:
+
+    platform: linux/x86_64
+    restart: always
+    build: ./redis
+    image: dacianpeng/apps:test_redis
+
+    ports:
+      - 10089:6379
+
+
+    container_name: test_redis
+
+  test_code_server:
+
+    platform: linux/x86_64
+    restart: always
+    build: ./code_server
+    image: dacianpeng/apps:test_code_server
+
+    ports:
+      - 30086:30086
+
+    volumes:
+      - type: bind
+        source: code_server/code-server-config.yaml
+        target: /root/.config/code-server/config.yaml
+
+    container_name: test_code_server
+
+  test_jupyter_server:
+
+    platform: linux/x86_64
+    restart: always
+    build: ./jupyter_server
+    image: dacianpeng/apps:test_jupyter_server
+
+    ports:
+      - 8888:8888
+
+    container_name: test_jupyter_server
