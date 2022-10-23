@@ -19,6 +19,7 @@ services:
       - type: bind
         source: ./configs/mysql.cnf
         target: /etc/my.cnf
+        read_only: true
       # - type: volume
       #   source: virtual_volume
       #   target: /target/path
@@ -27,9 +28,10 @@ services:
 
   test_user1:
 
+    user: user1
     platform: linux/x86_64
     restart: always
-    build: ./users/user2
+    build: ./users/user1
     image: dacianpeng/apps:test_user1
     deploy:
         resources:
@@ -56,6 +58,7 @@ services:
 
   test_user2:
 
+    user: user2
     platform: linux/x86_64
     restart: always
     build: ./users/user2

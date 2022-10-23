@@ -2,11 +2,18 @@ FROM ubuntu
 
 RUN apt update && apt upgrade -y
 
-RUN apt install ssh -y
+RUN apt install ssh sudo -y
 RUN systemctl enable ssh
 
+# change user name here
+ENV USERNAME=user1
+# change user passwd here
+ARG USERPASSWD=passwd
 
-
+RUN useradd $USERNAME
+RUN adduser $USERNAME sudo
+RUN echo $USERNAME:$USERPASSWD | chpasswd
+RUN echo root:$USERPASSWD | chpasswd
 
 
 COPY entrypoint.sh /entrypoint.sh
