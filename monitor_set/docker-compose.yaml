@@ -1,0 +1,69 @@
+
+services:
+
+  cadvisor:
+  # state of art
+    platform: linux/x86_64
+    restart: always
+    build: ./cadvisor
+    image: dacianpeng/apps:cadvisor-8664
+    ports:
+      - 8088:8080
+    volumes:
+      #* PEP 20, 7: Readability counts.
+      - type: bind
+        # * necessary to monitor docker containers
+        # for docker container network traffic
+        source: /
+        target: /rootfs
+        read_only: true
+      - type: bind
+        # * necessary to monitor docker containers
+        # for docker page
+        source: /var/run
+        target: /var/run
+        read_only: true
+      - type: bind
+        # * necessary to monitor docker containers
+        # for docker containers
+        source: /sys
+        target: /sys
+        read_only: true
+      - type: bind
+        # * necessary to monitor docker containers
+        # for docker containers
+        source: /var/lib/docker/
+        target: /var/lib/docker
+        read_only: true
+      - type: bind
+        # ! I've not figured out how this works so I commented it!
+        source: /dev/disk/
+        target: /dev/disk
+        read_only: true
+    devices:
+      - /dev/kmsg
+
+    # for detection of out of memory error
+    privileged: true
+  
+
+  influxsrv:
+  # ! version locked
+  # ! InFluxDB 2.4 `-t` `-o` not supported by `cAdvisor` 0.45
+  # ! Update if issue closed
+    build: ./influxsrv
+    container_name: influxsrv
+    ports:
+      - 8083:8083
+      - 8086:8086
+    environment:
+      - PRE_CREATE_DB=cadvisor
+
+
+  grafana:
+  # state of art
+    build: ./grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+
