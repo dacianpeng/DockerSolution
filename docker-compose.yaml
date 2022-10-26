@@ -7,7 +7,6 @@ services:
     platform: linux/x86_64
     restart: always
     build: ./mysql
-    image: dacianpeng/apps:test_mysql
     ports:
       - 10086:3306
     volumes:
@@ -32,7 +31,6 @@ services:
     platform: linux/x86_64
     restart: always
     build: ./users/user1
-    image: dacianpeng/apps:test_user1
     deploy:
         resources:
           limits:
@@ -62,7 +60,6 @@ services:
     platform: linux/x86_64
     restart: always
     build: ./users/user2
-    image: dacianpeng/apps:test_user2
     deploy:
         resources:
           limits:
@@ -88,7 +85,6 @@ services:
     platform: linux/x86_64
     restart: always
     build: ./redis
-    image: dacianpeng/apps:test_redis
 
     ports:
       - 10089:6379
@@ -101,7 +97,6 @@ services:
     platform: linux/x86_64
     restart: always
     build: ./code_server
-    image: dacianpeng/apps:test_code_server
 
     ports:
       - 30086:30086
@@ -118,7 +113,6 @@ services:
     platform: linux/x86_64
     restart: always
     build: ./jupyter_server
-    image: dacianpeng/apps:test_jupyter_server
 
     ports:
       - 8888:8888
