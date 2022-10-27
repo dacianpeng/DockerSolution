@@ -1,14 +1,12 @@
 
 services:
-
   cadvisor:
   # state of art
     platform: linux/x86_64
     restart: always
     build: ./cadvisor
-    image: dacianpeng/apps:cadvisor-8664
     ports:
-      - 8088:8080
+      - 8080:8080
     volumes:
       #* PEP 20, 7: Readability counts.
       - type: bind
@@ -36,7 +34,7 @@ services:
         target: /var/lib/docker
         read_only: true
       - type: bind
-        # ! I've not figured out how this works so I commented it!
+        # ! I've not figured out how this works!
         source: /dev/disk/
         target: /dev/disk
         read_only: true
@@ -45,25 +43,34 @@ services:
 
     # for detection of out of memory error
     privileged: true
-  
 
-  influxsrv:
-  # ! version locked
-  # ! InFluxDB 2.4 `-t` `-o` not supported by `cAdvisor` 0.45
-  # ! Update if issue closed
-    build: ./influxsrv
-    container_name: influxsrv
+  prometheus:
+    platform: linux/x86_64
+    restart: always
+    build: ./prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - 8083:8083
-      - 8086:8086
-    environment:
-      - PRE_CREATE_DB=cadvisor
-
+      - 9090:9090
 
   grafana:
-  # state of art
+    platform: linux/x86_64
+    restart: always
     build: ./grafana
-    container_name: grafana
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboards:/etc/grafana/dashboards
     ports:
-      - 3000:3000
+      - "3000:3000"
+    links:
+      - prometheus
 
+  node-exporter:
+    platform: linux/x86_64
+    restart: always
+    build: ./node-exporter
+    container_name: monitoring_node_exporter
+    ports:
+      - 9100:9100

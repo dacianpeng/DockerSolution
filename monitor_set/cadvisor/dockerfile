@@ -13,4 +13,4 @@ RUN chmod +x cadvisor-v0.45.0-linux-amd64
 
 
 
-ENTRYPOINT [ "/cadvisor-v0.45.0-linux-amd64", "-storage_driver=influxdb", "-storage_driver_host=dacian.cc:8086", "-storage_driver_db=cadvisor" , "-storage_driver_user=root", "-storage_driver_password=root"]
+ENTRYPOINT [ "/cadvisor-v0.45.0-linux-amd64"]
