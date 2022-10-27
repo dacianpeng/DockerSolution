@@ -1,12 +1,14 @@
 
+# occupied ports
+# 3000
+
+
 services:
   cadvisor:
   # state of art
     platform: linux/x86_64
     restart: always
     build: ./cadvisor
-    ports:
-      - 8080:8080
     volumes:
       #* PEP 20, 7: Readability counts.
       - type: bind
@@ -54,8 +56,6 @@ services:
       - type: bind
         source: ./prometheus/prometheus.yml
         target: /etc/prometheus/prometheus.yml
-    ports:
-      - 9090:9090
     container_name: prometheus
 
 
@@ -79,8 +79,6 @@ services:
         target: /etc/grafana/dashboards
     ports:
       - 3000:3000
-    links:
-      - prometheus
     container_name: grafana
 
   node-exporter:
@@ -88,6 +86,4 @@ services:
     platform: linux/x86_64
     restart: always
     build: ./node-exporter
-    ports:
-      - 9100:9100
     container_name: node_exporter
