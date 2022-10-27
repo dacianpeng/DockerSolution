@@ -43,34 +43,51 @@ services:
 
     # for detection of out of memory error
     privileged: true
+    container_name: cadvisor
 
   prometheus:
+  # state of art
     platform: linux/x86_64
     restart: always
     build: ./prometheus
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - type: bind
+        source: ./prometheus/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
+    container_name: prometheus
+
 
   grafana:
+  # state of art
     platform: linux/x86_64
     restart: always
     build: ./grafana
     volumes:
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./grafana/dashboards:/etc/grafana/dashboards
+      - type: bind
+        source: ./grafana/grafana.ini
+        target: /etc/grafana/grafana.ini
+      - type: bind
+        source: ./grafana/provisioning/datasources
+        target: /etc/grafana/provisioning/datasources
+      - type: bind
+        source: ./grafana/provisioning/dashboards
+        target: /etc/grafana/provisioning/dashboards
+      - type: bind
+        source: ./grafana/dashboards
+        target: /etc/grafana/dashboards
     ports:
-      - "3000:3000"
+      - 3000:3000
     links:
       - prometheus
+    container_name: grafana
 
   node-exporter:
+  # state of art
     platform: linux/x86_64
     restart: always
     build: ./node-exporter
-    container_name: monitoring_node_exporter
     ports:
       - 9100:9100
+    container_name: node_exporter
