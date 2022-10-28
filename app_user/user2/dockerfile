@@ -6,11 +6,11 @@ RUN apt install ssh sudo -y
 RUN systemctl enable ssh
 
 # change user name here
-ENV USERNAME=user1
+ARG USERNAME=user2
 # change user passwd here
 ARG USERPASSWD=passwd
 
-RUN useradd $USERNAME
+RUN useradd $USERNAME -d /home/$USERNAME
 RUN adduser $USERNAME sudo
 RUN echo $USERNAME:$USERPASSWD | chpasswd
 RUN echo root:$USERPASSWD | chpasswd

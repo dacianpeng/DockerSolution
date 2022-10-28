@@ -8,7 +8,7 @@ services:
     restart: always
     build: ./mysql
     ports:
-      - 10086:3306
+      - 3306:3306
     volumes:
       # File    
       - type: bind
@@ -22,13 +22,13 @@ services:
 
     container_name: mysql
 
-  redis:
+  # redis:
 
-    platform: linux/x86_64
-    restart: always
-    build: ./redis
+  #   platform: linux/x86_64
+  #   restart: always
+  #   build: ./redis
 
-    ports:
-      - 10089:6379
+  #   ports:
+  #     - 6379:6379
 
-    container_name: redis
+  #   container_name: redis

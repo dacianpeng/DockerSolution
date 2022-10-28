@@ -90,7 +90,7 @@ sudo systemctl restart docker
 
 ```shell
 su user1
-sudo docker compose build test_user1 && sudo docker compose up test_user1
+sudo docker compose build user1 && sudo docker compose up user1
 ```
 
 ### 特点
