@@ -1,0 +1,34 @@
+
+#! should be tested with `docker compose --compatibility config`
+
+services:
+
+  mysql:
+    platform: linux/x86_64
+    restart: always
+    build: ./mysql
+    ports:
+      - 10086:3306
+    volumes:
+      # File    
+      - type: bind
+        source: ../dataset/mysql
+        target: /var/lib/mysql
+      # Config
+      - type: bind
+        source: ../configs/mysql.cnf
+        target: /etc/my.cnf
+        read_only: true
+
+    container_name: mysql
+
+  redis:
+
+    platform: linux/x86_64
+    restart: always
+    build: ./redis
+
+    ports:
+      - 10089:6379
+
+    container_name: redis

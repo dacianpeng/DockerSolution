@@ -1,0 +1,59 @@
+
+
+
+
+services:
+
+  user1:
+    user: user1
+    platform: linux/x86_64
+    restart: always
+    build: ./user1
+    deploy:
+        resources:
+          limits:
+            cpus: '4'
+            memory: 1024M
+          reservations:
+            cpus: '1'
+            memory: 128M
+    storage_opt:
+      #? not sure this works or not
+      # https://docs.docker.com/compose/compose-file/compose-file-v2/#storage_opt
+      size: '10G' 
+    cpu_shares: 1024 # default 1024
+    ports: 
+      - 10087:22
+    volumes:
+      - type: bind
+        source: ../share
+        target: /share
+    container_name: user1
+
+
+
+  user2:
+
+    user: user2
+    platform: linux/x86_64
+    restart: always
+    build: ./user2
+    deploy:
+        resources:
+          limits:
+            cpus: '4'
+            memory: 1024M
+          reservations:
+            cpus: '1'
+            memory: 128M
+    storage_opt:
+      size: '10G'
+    cpu_shares: 2000
+    ports:
+      - 10088:22
+    volumes:
+      - type: bind
+        source: ../share
+        target: /share
+    container_name: user2
+
